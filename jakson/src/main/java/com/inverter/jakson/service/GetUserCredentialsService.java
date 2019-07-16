@@ -3,6 +3,7 @@ package com.inverter.jakson.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties.Jwt;
 import org.springframework.stereotype.Service;
 
 import com.inverter.jakson.dao.GetUserCredentailDao;
@@ -18,6 +19,7 @@ public class GetUserCredentialsService {
 	
 	public GetUserCredentialDto getUserCredentials(String jkusername) {
 		//getUserCredentials
+		
 		return getUserCredentailDao.getUserCredentials(jkusername);
 	}
 }

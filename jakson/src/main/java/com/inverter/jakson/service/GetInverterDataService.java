@@ -1,28 +1,15 @@
 package com.inverter.jakson.service;
 
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,15 +17,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.annotation.JsonValue;
 import com.inverter.jakson.dto.GetUserCredentialDto;
 
 @Service
 public class GetInverterDataService {
 	
 	String unit_key;
-	Integer value = null;
+	Double value = null;
 	String unit_of_measure = null;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GetInverterDataService.class);
@@ -46,23 +31,21 @@ public class GetInverterDataService {
 	@Autowired
 	private GetUserCredentialsService userCredentialsService;
 	
-	public String getBatteryVoltage() {
+	public String getBatteryVoltage(String jkusername, String name_of_unit) {
 		
 		LOGGER.debug("Request recieved in service to get battery voltage");
-		String jkusername = "hemant.sapra@jakson.com";
 		//getUserCredentials
 		GetUserCredentialDto getUserCredentialDto = userCredentialsService.getUserCredentials(jkusername);
 		//getAuthToken
 		String authtoken = getAuthToken(getUserCredentialDto.getJkusername(),getUserCredentialDto.getJkpassword());
 		//get all site data having all units
-		String allSiteData = getAllSitesData(authtoken);
-		String siteKey = "21c5t96537";
+		String allSiteData = getAllSitesData(authtoken);		
 		JSONObject sites = new JSONObject(allSiteData);
 		JSONArray unitkey = sites.getJSONArray("units");
 		for(int i = 0; i<unitkey.length(); i++ ) {
 			JSONObject jb = unitkey.getJSONObject(i);
-			String site_key = jb.getString("site_key");
-			if(site_key.equals(siteKey)) {
+			String unitNames = jb.getString("name");
+			if(unitNames.equals(name_of_unit)) {
 				unit_key = jb.getString("unit_key");
 				System.out.println("To get the unit keys "+unit_key);
 				break;
@@ -76,13 +59,13 @@ public class GetInverterDataService {
 		LOGGER.debug("Returned Inverter data is "+inverterData);
 		JSONObject inverterDataJson = new JSONObject(inverterData);
 		LOGGER.debug("The inverter data ");
-		JSONObject dataForUnitKey = inverterDataJson.getJSONObject("f92956te22");
+		JSONObject dataForUnitKey = inverterDataJson.getJSONObject(unit_key);
 		JSONArray dataForParameters = dataForUnitKey.getJSONArray("data");
 		
 		for(int i = 0; i<dataForParameters.length(); i++ ) {
 			JSONObject jb = dataForParameters.getJSONObject(i);
 			if (i == dataForParameters.length()-1) {
-				value = jb.getInt("value");
+				value = jb.getDouble("value");
 				 unit_of_measure = jb.getString("unit_of_measure");
 				 System.out.println("To get the data for parameter "+value+unit_of_measure);
 			}
@@ -98,9 +81,11 @@ public class GetInverterDataService {
 		try {
 				
 			String payload = "{" +
-	                "\"email\": \"hitaksh@asun.co.in\", " +
-	                "\"password\": \"asun1234\"" +
+	                "\"email\": \""+username+"\", " +
+	                "\"password\": \""+password+"\"" +
 	                "}";
+			
+			LOGGER.debug("Payload is ------- "+payload);
 	        StringEntity entity = new StringEntity(payload,
 	                ContentType.APPLICATION_JSON);
 
@@ -150,10 +135,12 @@ public class GetInverterDataService {
 	
 	public String dataForInverter(String authToken, String unitkey) {
 		String payload = "{\r\n" + 
-				"\"units\":{\"f92956te22\": [\"Daily Energy\",\"Total Energy\"]},\r\n" + 
-				"\"from\":1554057000,\r\n" + 
-				"\"to\":1554143400\r\n" + 
+				"\"units\":{\""+unitkey+"\": [\"PV1 Voltage\"]},\r\n" + 
+				"\"from\":1562229000,\r\n" + 
+				"\"to\":1562231100\r\n" + 
 				"}";
+		
+		LOGGER.debug("Payload is --------"+ payload+"---------unitkey -----"+authToken);
         StringEntity entity = new StringEntity(payload,
                 ContentType.APPLICATION_JSON);
 
