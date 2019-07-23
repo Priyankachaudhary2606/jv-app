@@ -58,13 +58,11 @@ public class GetUserCredentailDao extends AbstractTransactionalDao{
 	
 		public GetUserCredentialDto mapRow(ResultSet rs, int rownum) throws SQLException {
 			
-			String jkusername = rs.getString("jkusername");
-			String jkpassword = rs.getString("jkpassword");
-			String displayname = rs.getString("displayname");
-			String voiceid = rs.getString("voiceid");
-			Integer mobileno = rs.getInt("mobileno");
+			String jkusername = rs.getString("username");
+			String jkpassword = rs.getString("password");
+			String authToken = rs.getString("auth_token");
 			
-			return new GetUserCredentialDto(jkusername, jkpassword, displayname, voiceid, mobileno);
+			return new GetUserCredentialDto(jkusername, jkpassword, authToken);
 		}
 		
 	}

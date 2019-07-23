@@ -1,3 +1,2 @@
-storeuser:
- checkUserExistenceSql: SELECT EXISTS(SELECT 1 FROM users WHERE jkusername = :user_email);
- saveNewUserSql: INSERT INTO users (jkusername, jkpassword, displayname, voiceid, mobileno) VALUES (:jkusername, :jkpassword, :displayname, :voiceid, :mobileno);
+storeusertoken:
+ saveNewUserSql: UPDATE table users set auth_token = :authToken where username = :username;

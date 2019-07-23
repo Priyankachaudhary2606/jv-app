@@ -9,31 +9,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource("classpath:sql/storeUserDetails.yml")
-@ConfigurationProperties(prefix="storeuser")
+@ConfigurationProperties(prefix="storeusertoken")
 public class StoreUserDetailsConfig {
-
-	 @Value("${checkUserExistenceSql}")
-	private String checkUserExistenceSql;
 	 
 
 	 @Value("${saveNewUserSql}")	
 	private String saveNewUserSql;
-
-
-	/**
-	 * @return the checkUserExistenceSql
-	 */
-	public String getCheckUserExistenceSql() {
-		return checkUserExistenceSql;
-	}
-
-
-	/**
-	 * @param checkUserExistenceSql the checkUserExistenceSql to set
-	 */
-	public void setCheckUserExistenceSql(String checkUserExistenceSql) {
-		this.checkUserExistenceSql = checkUserExistenceSql;
-	}
 
 
 	/**

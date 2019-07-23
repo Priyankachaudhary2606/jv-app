@@ -22,27 +22,26 @@ public class StoreUserDetailsDao extends AbstractTransactionalDao {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(StoreUserDetailsDao.class);
 
-	public int checkUserExistence(StoreUserDetailsDto storeUserDetailsDto) {
-		
-		LOGGER.debug("Request received in DAo - checkUserExistence"+storeUserDetailsDto.getJkusername());
-		
-		Map<String,Object> email = new HashMap<String, Object>();
-		email.put("user_email", storeUserDetailsDto.getJkusername());
-		LOGGER.debug("Executing Query"+ storeUserDetailsConfig.getCheckUserExistenceSql()+ "parameters are"+ email.get("user_email"));
-		int userExistenceStatus= getJdbcTemplate().queryForObject(storeUserDetailsConfig.getCheckUserExistenceSql(), email, Integer.class);
-		LOGGER.debug("Returning response "+ userExistenceStatus);
-		return userExistenceStatus;
-	}
+//	public int checkUserExistence(StoreUserDetailsDto storeUserDetailsDto) {
+//		
+//		LOGGER.debug("Request received in DAo - checkUserExistence"+storeUserDetailsDto.getJkusername());
+//		
+//		Map<String,Object> parameters = new HashMap<String, Object>();
+//		parameters.put("username", storeUserDetailsDto.getJkusername());
+//		
+//		LOGGER.debug("Executing Query"+ storeUserDetailsConfig.getCheckUserExistenceSql()+ "parameters are"+ parameters.get("user_email"));
+//		int userExistenceStatus= getJdbcTemplate().queryForObject(storeUserDetailsConfig.getCheckUserExistenceSql(), parameters, Integer.class);
+//		LOGGER.debug("Returning response "+ userExistenceStatus);
+//		return userExistenceStatus;
+//	}
 	
-	public int saveNewUser(StoreUserDetailsDto storeUserDetailsDto) {
-		LOGGER.debug("Received request in DAO - savenewuser"+storeUserDetailsDto.getJkusername());
+	public int saveNewToken(String username, String authToken) {
+		LOGGER.debug("Received request in DAO - savenewAuthToken");
 		Map<String,Object> parameters = new HashMap<String, Object>();
-		parameters.put("jkusername", storeUserDetailsDto.getJkusername());
-		parameters.put("jkpassword", storeUserDetailsDto.getJkpassword());
-		parameters.put("displayname", storeUserDetailsDto.getDisplayname());
-		parameters.put("mobileno", storeUserDetailsDto.getMobileno());
-		parameters.put("voiceid", storeUserDetailsDto.getVoiceid());
-		LOGGER.debug("Executing Query"+storeUserDetailsConfig.getSaveNewUserSql()+"parameters are "+parameters.get("jkusername"));
+		parameters.put("username", username);
+		parameters.put("authToken", authToken);
+		
+		LOGGER.debug("Executing Query"+storeUserDetailsConfig.getSaveNewUserSql()+"parameters are "+parameters.get("username"));
 		int addNewUser;
 		try {
 			addNewUser = getJdbcTemplate().update(storeUserDetailsConfig.getSaveNewUserSql(), parameters);

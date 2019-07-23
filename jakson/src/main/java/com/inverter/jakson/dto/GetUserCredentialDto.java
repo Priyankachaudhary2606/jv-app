@@ -4,9 +4,21 @@ public class GetUserCredentialDto {
 	
 	private String jkusername;
 	private String jkpassword;
-	private String displayname;
-	private String voiceid;
-	private Integer mobileno;
+	private String authToken;
+	
+	
+	
+	public GetUserCredentialDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	public GetUserCredentialDto(String jkusername, String jkpassword, String authToken) {
+		super();
+		this.jkusername = jkusername;
+		this.jkpassword = jkpassword;
+		this.authToken = authToken;
+	}
 	/**
 	 * @return the jkusername
 	 */
@@ -32,54 +44,18 @@ public class GetUserCredentialDto {
 		this.jkpassword = jkpassword;
 	}
 	/**
-	 * @return the displayname
+	 * @return the authToken
 	 */
-	public String getDisplayname() {
-		return displayname;
+	public String getAuthToken() {
+		return authToken;
 	}
 	/**
-	 * @param displayname the displayname to set
+	 * @param authToken the authToken to set
 	 */
-	public void setDisplayname(String displayname) {
-		this.displayname = displayname;
+	public void setAuthToken(String authToken) {
+		this.authToken = authToken;
 	}
-	/**
-	 * @return the voiceid
-	 */
-	public String getVoiceid() {
-		return voiceid;
-	}
-	/**
-	 * @param voiceid the voiceid to set
-	 */
-	public void setVoiceid(String voiceid) {
-		this.voiceid = voiceid;
-	}
-	/**
-	 * @return the mobileno
-	 */
-	public Integer getMobileno() {
-		return mobileno;
-	}
-	/**
-	 * @param mobileno the mobileno to set
-	 */
-	public void setMobileno(Integer mobileno) {
-		this.mobileno = mobileno;
-	}
-	public GetUserCredentialDto(String jkusername, String jkpassword, String displayname, String voiceid,
-			Integer mobileno) {
-		super();
-		this.jkusername = jkusername;
-		this.jkpassword = jkpassword;
-		this.displayname = displayname;
-		this.voiceid = voiceid;
-		this.mobileno = mobileno;
-	}
-	public GetUserCredentialDto() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	
 	
 	
 
